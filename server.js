@@ -83,11 +83,11 @@ function handleError(res, reason, message, code) {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
     //var query = [{ userId: req.params.user }, { password: req.params.pwd }];
     //var query = { userId: req.params.user };
-    db.collection("users").find({}).toArray(function(err, doc) {
+    db.collection("users").find({}).toArray(function(err, docs) {
       if (err) {
         handleError(res, err.message, "Failed to get user.");
       } else {
-        res.status(200).json(doc.ops.token);
+        res.status(200).json(docs[0].token);
       }
     });
   });
