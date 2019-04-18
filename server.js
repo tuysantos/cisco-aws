@@ -54,13 +54,30 @@ function handleError(res, reason, message, code) {
     });
   });
 
-  app.get("/api/uc2instances/page/:skip/:top", function(req, res) {
+  app.get("/api/uc2instances/page/:skip/:top/:token", function(req, res) {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
     const topVal = req.params.top,
         skipVal = req.params.skip,
         top = (isNaN(topVal)) ? 10 : +topVal,
         skip = (isNaN(skipVal)) ? 0 : +skipVal;
+        let result;
 
+        if(req.params.token === ''){
+            result = {total: 0, errorMessage: 'You must specify a token', instances: []}
+            res.status(200).json(result);
+            return;
+        }
+        else {
+            var query = {token: req.params.token}
+            db.collection("users").find(query).toArray(function(err, docs) {
+            if (err) {
+                result = {total: 0, errorMessage: 'Invalid token', instances: []}
+                res.status(200).json(result);
+                return;
+                } 
+            });
+        }
+        
         db.collection(INSTANCES_COLLECTION).find({})
             .count(function(err, icount){
                 count = icount;
@@ -71,24 +88,23 @@ function handleError(res, reason, message, code) {
             .limit(top)
             .toArray(function(err, docs){
                 if (err) {
-                handleError(res, err.message, "Failed to get UC2 Instances.");
+                    result = {total: 0, errorMessage: 'Failed to get UC2 Instances.', instances: []}
+                    res.status(200).json(result);
                 } else {
-                let result = {total: count, instances: docs}
-                res.status(200).json(result);
+                    result = {total: count, errorMessage: '', instances: docs}
+                    res.status(200).json(result);
                 }
         });
   });
 
   app.get("/api/login/:token", function(req, res) {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
-    //var query = [{ userId: req.params.user }, { password: req.params.pwd }];
-    //var query = '$and: [{ userId: ' + req.params.user + '}, { password: ' + req.params.pwd + '}]';
     var query = {token: req.params.token}
     db.collection("users").find(query).toArray(function(err, docs) {
       if (err) {
-        res.status(200).json({});
+        res.status(200).json({isvalid: false});
       } else {
-        res.status(200).json(docs[0]);
+        res.status(200).json({isvalid: true});
       }
     });
   });
