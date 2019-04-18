@@ -38,6 +38,16 @@ function handleError(res, reason, message, code) {
     res.status(code || 500).json({"error": message});
   }
   
+function getTotal() {
+    db.collection(INSTANCES_COLLECTION).find({}).toArray(function(err, docs) {
+        if (err) {
+            return 0;
+        } else {
+            return docs.length;
+        }
+      });
+}
+
   /*  "/api/uc2instances"
    *    GET: finds all uc2 instances
    */
@@ -59,15 +69,15 @@ function handleError(res, reason, message, code) {
         skipVal = req.params.skip,
         top = (isNaN(topVal)) ? 10 : +topVal,
         skip = (isNaN(skipVal)) ? 0 : +skipVal;
-        let count = 0;
+
 
         db.collection(INSTANCES_COLLECTION).find({}).count((err, instCount) => {
-            count = instCount;
+
         }).skip(skip).limit(top).toArray(function(err, docs) {
             if (err) {
               handleError(res, err.message, "Failed to get UC2 Instances.");
             } else {
-            let result = {total: count, instances: docs}
+            let result = {total: getTotal(), instances: docs}
               res.status(200).json(result);
             }
           });
