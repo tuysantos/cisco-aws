@@ -38,32 +38,6 @@ function handleError(res, reason, message, code) {
     console.log("ERROR: " + reason);
     res.status(code || 500).json({"error": message});
   }
-  
-function getTotal() {
-    let result = 0;
-    db.collection(INSTANCES_COLLECTION).find({}).toArray(function(err, docs) {
-        if (err) {
-            result = 0;
-        } else {
-            result = docs.length;
-        }
-      });
-      return result;
-}
-
-function getInstancesByPage(skip, top, callback) {
-
-    db.collection(INSTANCES_COLLECTION).find({}).skip(skip).limit(top).toArray(function(err, docs) {
-        if (err) {
-          //handleError(res, err.message, "Failed to get UC2 Instances.");
-          callback(null, []);
-        } else {
-            callback(null, docs);
-        //let result = {total: 23, instances: docs}
-          //res.status(200).json(result);
-        }
-      });
-}
 
   /*  "/api/uc2instances"
    *    GET: finds all uc2 instances
@@ -87,16 +61,10 @@ function getInstancesByPage(skip, top, callback) {
         top = (isNaN(topVal)) ? 10 : +topVal,
         skip = (isNaN(skipVal)) ? 0 : +skipVal;
 
-        //getTotal(count);
-        //getInstancesByPage(skip, top, docs);
-        //let result = {total: count, instances: docs}
-        //res.status(200).json(result);
-
         db.collection(INSTANCES_COLLECTION).find({})
             .count(function(err, icount){
                 count = icount;
             });
-
 
         db.collection(INSTANCES_COLLECTION).find({})
             .skip(skip)
@@ -109,50 +77,20 @@ function getInstancesByPage(skip, top, callback) {
                 res.status(200).json(result);
                 }
         });
-
-
-        // db.collection(INSTANCES_COLLECTION).find({}).skip(skip).limit(top).toArray(function(err, docs) {
-        //     if (err) {
-        //       handleError(res, err.message, "Failed to get UC2 Instances.");
-        //     } else {
-        //     let result = {total: count, instances: docs}
-        //       res.status(200).json(result);
-        //     }
-        //   });
-    
-    // db.collection(INSTANCES_COLLECTION).count((err, instCount) => {
-    //     let count = instCount;
-    //     db.collection(INSTANCES_COLLECTION).find({})
-    //         .skip(skipVal)
-    //         .limit(topVal)
-    //         .exec((err, instances) => {
-    //             if(err) {
-    //                 return callback(err);
-    //             }
-    //             callback(null, {
-    //                 count: count,
-    //                 instances: instances
-    //             });
-    //         })
-    // });
-
-    
-
-    
   });
 
-//   app.get("/api/login/:user/:pwd", function(req, res) {
-//     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
-//     //var query = [{ userId: req.params.user }, { password: req.params.pwd }];
-//     var query = { userId: req.params.user };
-//     db.collection("users").find(query).toArray(function(err, docs) {
-//       if (err) {
-//         handleError(res, err.message, "Failed to get user.");
-//       } else {
-//         res.status(200).json(doc.ops.token);
-//       }
-//     });
-//   });
+  app.get("/api/login", function(req, res) {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
+    //var query = [{ userId: req.params.user }, { password: req.params.pwd }];
+    //var query = { userId: req.params.user };
+    db.collection("users").find({}).toArray(function(err, doc) {
+      if (err) {
+        handleError(res, err.message, "Failed to get user.");
+      } else {
+        res.status(200).json(doc.ops.token);
+      }
+    });
+  });
 
   app.post("/api/login", function(req, res) {
     var users = {userId:'admin', password:'supersecret', token: 'YWRtaW46c3VwZXJzZWNyZXQ='}
@@ -166,8 +104,6 @@ function getInstancesByPage(skip, top, callback) {
   });
   
   app.post("/api/uc2instances", function(req, res) {
-    //var newContact = req.body;
-    //newContact.createDate = new Date();
     var arrayData = [
         { name: 'name 3', id: 'b-457822wers', type: 't2.medium', az: 'us-east-1b', publicIP: '54.210.167.203', privateIP: '10.20.30.42', state: 'running'},
         { name: 'name 4', id: 'a-114582qprr', type: 't2.medium', az: 'us-east-1b', publicIP: '54.210.167.204', privateIP: '10.20.30.43', state: 'stopped'},
@@ -199,17 +135,5 @@ function getInstancesByPage(skip, top, callback) {
         }
     });
     
-  //insertMany
-    // if (!req.body.name) {
-    //   handleError(res, "Invalid user input", "Must provide a name.", 400);
-    // } else {
-    //   db.collection(INSTANCES_COLLECTION).insertOne(newContact, function(err, doc) {
-    //     if (err) {
-    //       handleError(res, err.message, "Failed to create new UC2 Instances.");
-    //     } else {
-    //       res.status(201).json(doc.ops[0]);
-    //     }
-    //   });
-    // }
   });
   
