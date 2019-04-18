@@ -38,14 +38,16 @@ function handleError(res, reason, message, code) {
     res.status(code || 500).json({"error": message});
   }
   
-function getTotal(callback) {
+function getTotal() {
+    let result = 0;
     db.collection(INSTANCES_COLLECTION).find({}).toArray(function(err, docs) {
         if (err) {
-            callback(null,0);
+            result = 0;
         } else {
-            callback(null,docs.length);
+            result = docs.length;
         }
       });
+      return result;
 }
 
 function getInstancesByPage(skip, top, callback) {
@@ -84,18 +86,18 @@ function getInstancesByPage(skip, top, callback) {
         top = (isNaN(topVal)) ? 10 : +topVal,
         skip = (isNaN(skipVal)) ? 0 : +skipVal;
 
-        getTotal(count);
-        getInstancesByPage(skip, top, docs);
-        let result = {total: count, instances: docs}
-        res.status(200).json(result);
-        // db.collection(INSTANCES_COLLECTION).find({}).skip(skip).limit(top).toArray(function(err, docs) {
-        //     if (err) {
-        //       handleError(res, err.message, "Failed to get UC2 Instances.");
-        //     } else {
-        //     let result = {total: 23, instances: docs}
-        //       res.status(200).json(result);
-        //     }
-        //   });
+        //getTotal(count);
+        //getInstancesByPage(skip, top, docs);
+        //let result = {total: count, instances: docs}
+        //res.status(200).json(result);
+        db.collection(INSTANCES_COLLECTION).find({}).skip(skip).limit(top).toArray(function(err, docs) {
+            if (err) {
+              handleError(res, err.message, "Failed to get UC2 Instances.");
+            } else {
+            let result = {total: getTotal(), instances: docs}
+              res.status(200).json(result);
+            }
+          });
     
     // db.collection(INSTANCES_COLLECTION).count((err, instCount) => {
     //     let count = instCount;
