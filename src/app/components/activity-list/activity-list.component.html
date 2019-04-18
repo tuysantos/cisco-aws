@@ -1,0 +1,36 @@
+
+  <div class="row grid-container">
+      <div class="col-md-10">
+          <div class="table">
+              <table class="table table-striped table-hover">
+                  <thead>
+                      <tr class="grid-header">
+                          <th (click)="sort('name')">Name</th>
+                          <th (click)="sort('id')">Id</th>
+                          <th (click)="sort('type')">Type</th>
+                          <th (click)="sort('state')">State</th>
+                          <th (click)="sort('az')">az</th>
+                          <th (click)="sort('publicIP')">Public IP</th>
+                          <th (click)="sort('privateIP')">Private IP</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let instance of activityList">
+                          <td>{{ instance.name }}</td>
+                          <td>{{ instance.id }}</td>
+                          <td>{{ instance.type }}</td>
+                          <td>{{ instance.state }}</td>
+                          <td>{{ instance.az }}</td>
+                          <td>{{ instance.publicIP }}</td>
+                          <td>{{ instance.privateIP }}</td>
+                      </tr>
+                      <tr *ngIf="!activityList.length">
+                          <td>&nbsp;</td>
+                          <td colspan="6">No Records Found</td>
+                      </tr>
+                  </tbody>
+              </table>
+          </div>
+      </div>
+  </div>
+

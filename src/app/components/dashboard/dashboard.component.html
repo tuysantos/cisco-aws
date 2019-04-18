@@ -1,0 +1,40 @@
+<div class="container dashboard-container">
+  <div class="row">
+    <div class="col-sm-12">
+      <span class="title">Dashboard - Active Instances
+          <a class="btn btn-default" [routerLink]="['/dashboard-aws']"> click here for AWS version</a>
+      </span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-offset-8 col-sm-12 col-md-4">
+      <app-summary-activity 
+        [totalRunning]="totalRunning"
+        [totalStop]="totalStop"></app-summary-activity>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <app-search 
+        [availableType]="availableType" 
+        [selectedSearchType]="'name'" 
+        (searchEvent)="searchItem($event)"></app-search>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <app-activity-list 
+        (sortEvent)="sortList($event)"
+        [activityList]="uc2ActiveList"></app-activity-list>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <app-pagination 
+        [pageSize]="pageSize" 
+        [totalItems]="totalRecords" 
+        (pageChanged)="pageChanged($event)"></app-pagination>
+    </div>
+  </div>
+</div>
+
