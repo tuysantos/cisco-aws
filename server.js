@@ -71,10 +71,15 @@ function handleError(res, reason, message, code) {
             var query = {token: req.params.token}
             db.collection("users").find(query).toArray(function(err, docs) {
             if (err) {
-                result = {total: 0, errorMessage: 'Invalid token', instances: []}
-                res.status(200).json(result);
-                return;
+                handleError(res, err.message, "Failed to create new user.");
                 } 
+                else {
+                    if(docs.length === 0){
+                        res.status(200).json({isvalid: true});
+                        result = {total: 0, errorMessage: 'Invalid token', instances: []}
+                        res.status(200).json(result);
+                    }
+                }
             });
         }
         
@@ -88,19 +93,23 @@ function handleError(res, reason, message, code) {
             .limit(top)
             .toArray(function(err, docs){
                 if (err) {
-                    result = {total: 0, errorMessage: 'Failed to get UC2 Instances.', instances: []}
-                    res.status(200).json(result);
+                    handleError(res, err.message, "Failed to create new user.");
                 } else {
-                    result = {total: count, errorMessage: '', instances: docs}
-                    res.status(200).json(result);
+                    if(docs.length === 0){
+                        result = {total: 0, errorMessage: 'Failed to get UC2 Instances.', instances: []}
+                        res.status(200).json(result);
+                    }
+                    else {
+                        result = {total: count, errorMessage: '', instances: docs}
+                        res.status(200).json(result);
+                    }
                 }
         });
   });
 
   app.get("/api/login/:user", function(req, res) {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
-    //var query = {token: req.params.token}
-    var query = {userId: req.params.user}
+    var query = {token: req.params.token}
     db.collection("users").find(query).toArray(function(err, docs) {
       if (err) {
         handleError(res, err.message, "Failed to create new user.");
