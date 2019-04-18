@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 //import { Http, Headers, Response } from '@angular/httpClient';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, of as ObservableOf } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 import { SessionService } from './session.service';
+import { environment } from 'src/environments/environment';
 
 
 
@@ -14,21 +15,49 @@ export class LoginService {
 
   constructor(private http: HttpClient, private sessionService: SessionService) { }
 
-  public login(user: string, password: string): Observable<string> {
-    return ObservableOf(this.isValidUser(user, password)).pipe(
-      map((response) => {
-        this.sessionService.addUser(response);
-        this.sessionService.setUserName(user);
-        this.sessionService.setUserPassword(password);
-        this.sessionService.setHeader();
-        return response;
-      })
-    );
+  public login(userId: string, password: string): Observable<string> {
+    const params = new HttpParams()
+      .set('user', userId)
+      .set('pwd', password);
+    return this.http.get<string>(`${environment.apiEndPoint}/login`, { params})
+        .pipe(
+          map( (response: string) => {
+            console.log('response', response);
+            this.sessionService.addUser(response);
+            this.sessionService.setUserName(userId);
+            this.sessionService.setUserPassword(password);
+            this.sessionService.setHeader();
+            return response;
+          }),
+          catchError(this.handleError)
+        );
   }
 
-  private isValidUser(user: string, pwd: string): string {
-    return ((user === 'admin') && (pwd === 'supersecret')) ? '1111111111111' : '';
+  private handleError(error: HttpErrorResponse) {
+    console.error('server error:', error); 
+    if (error.error instanceof Error) {
+      let errMessage = error.error.message;
+      return Observable.throw(errMessage);
+    }
+    return Observable.throw(error);
   }
+
+    // return ObservableOf(this.isValidUser(user, password)).pipe(
+    //   map((response) => {
+    //     this.sessionService.addUser(response);
+    //     this.sessionService.setUserName(user);
+    //     this.sessionService.setUserPassword(password);
+    //     this.sessionService.setHeader();
+    //     return response;
+    //   })
+    // );
+
+
+  
+
+  // private isValidUser(user: string, pwd: string): string {
+  //   return ((user === 'admin') && (pwd === 'supersecret')) ? '1111111111111' : '';
+  // }
 
   logout() {
     // remove user from local storage to log user out
