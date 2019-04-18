@@ -71,9 +71,7 @@ function getTotal() {
         skip = (isNaN(skipVal)) ? 0 : +skipVal;
 
 
-        db.collection(INSTANCES_COLLECTION).find({}).count((err, instCount) => {
-
-        }).skip(skip).limit(top).toArray(function(err, docs) {
+        db.collection(INSTANCES_COLLECTION).find({}).skip(skip).limit(top).toArray(function(err, docs) {
             if (err) {
               handleError(res, err.message, "Failed to get UC2 Instances.");
             } else {
