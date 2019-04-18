@@ -105,7 +105,12 @@ function handleError(res, reason, message, code) {
       if (err) {
         handleError(res, err.message, "Failed to create new user.");
       } else {
-        res.status(200).json({isvalid: true});
+        if(docs.length > 0){
+            res.status(200).json({isvalid: true});
+        }
+        else {
+            res.status(200).json({isvalid: false});
+        }
       }
     });
   });
