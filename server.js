@@ -91,14 +91,14 @@ function getInstancesByPage(skip, top, callback) {
         //let result = {total: count, instances: docs}
         //res.status(200).json(result);
 
-        db.collection(INSTANCES_COLLECTION).count(err, count).skip(skip).limit(top).toArray(function(err, docs) {
+        db.collection(INSTANCES_COLLECTION).find({}).count(function(err, icount){
             if (err) {
               handleError(res, err.message, "Failed to get UC2 Instances.");
             } else {
-            let result = {total: count}
+            let result = {total: icount}
               res.status(200).json(result);
             }
-          });
+        });
 
 
         // db.collection(INSTANCES_COLLECTION).find({}).skip(skip).limit(top).toArray(function(err, docs) {
