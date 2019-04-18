@@ -61,7 +61,7 @@ function handleError(res, reason, message, code) {
       if (err) {
         handleError(res, err.message, "Failed to get user.");
       } else {
-        res.status(200).json(doc.ops[0].token);
+        res.status(200).json(doc.ops.token);
       }
     });
   });
