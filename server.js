@@ -7,7 +7,7 @@ var INSTANCES_COLLECTION = "uc2instances";
 
 var app = express();
 app.use(bodyParser.json());
-
+let count = 0;
 // Create a database variable outside of the database connection callback to reuse the connection pool in your app.
 var db;
 
@@ -90,11 +90,13 @@ function getInstancesByPage(skip, top, callback) {
         //getInstancesByPage(skip, top, docs);
         //let result = {total: count, instances: docs}
         //res.status(200).json(result);
-        db.collection(INSTANCES_COLLECTION).find({}).skip(skip).limit(top).toArray(function(err, docs) {
+        db.collection(INSTANCES_COLLECTION).find({}, () => {
+            count = 13;
+        }).skip(skip).limit(top).toArray(function(err, docs) {
             if (err) {
               handleError(res, err.message, "Failed to get UC2 Instances.");
             } else {
-            let result = {total: getTotal(), instances: docs}
+            let result = {total: count, instances: docs}
               res.status(200).json(result);
             }
           });
