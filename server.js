@@ -22,6 +22,8 @@ mongodb.MongoClient.connect(process.env.MONGODB_URI || "mongodb://localhost:2701
   db = client.db();
   console.log("Database connection ready");
 
+  
+
   // Initialize the app.
   var server = app.listen(process.env.PORT || 8080, function () {
     var port = server.address().port;
@@ -49,13 +51,21 @@ function handleError(res, reason, message, code) {
       }
     });
   });
+
+  app.get("/api/login", function(req, res) {
+    db.collection(INSTANCES_COLLECTION).find({}).toArray(function(err, docs) {
+      if (err) {
+        handleError(res, err.message, "Failed to get UC2 Instances.");
+      } else {
+        res.status(200).json(docs);
+      }
+    });
+  });
   
   app.post("/api/uc2instances", function(req, res) {
     //var newContact = req.body;
     //newContact.createDate = new Date();
     var arrayData = [
-        { name: 'name 1', id: 'a-123456abcd', type: 't2.medium', az: 'us-east-1b', publicIP: '54.210.167.200', privateIP: '10.20.30.40', state: 'running'},
-        { name: 'name 2', id: 'a-027845mpds', type: 't2.small', az: 'us-east-1b', publicIP: '54.210.167.201', privateIP: '10.20.30.41', state: 'running'},
         { name: 'name 3', id: 'b-457822wers', type: 't2.medium', az: 'us-east-1b', publicIP: '54.210.167.203', privateIP: '10.20.30.42', state: 'running'},
         { name: 'name 4', id: 'a-114582qprr', type: 't2.medium', az: 'us-east-1b', publicIP: '54.210.167.204', privateIP: '10.20.30.43', state: 'stopped'},
         { name: 'name 5', id: 'c-451233gdcb', type: 't1.medium', az: 'us-east-1b', publicIP: '54.210.167.205', privateIP: '10.20.30.44', state: 'running'},
@@ -78,18 +88,15 @@ function handleError(res, reason, message, code) {
         { name: 'name 22', id: 'i-162542djgg', type: 't2.medium', az: 'us-east-1b', publicIP: '54.210.168.141', privateIP: '10.21.30.40', state: 'running'}
     ];
 
-    for(var i=0; i< arrayData.length; i++){
-        var newInstance = arrayData[i];
-        db.collection(INSTANCES_COLLECTION).insertOne(newInstance, function(err, doc) {
-            if (err) {
-                handleError(res, err.message, "Failed to create new UC2 Instances.");
-            } else {
-                res.status(201).json(doc.ops[0]);
-            }
-        });
-    }
+    db.collection(INSTANCES_COLLECTION).insertMany(arrayData, function(err, doc) {
+        if (err) {
+            handleError(res, err.message, "Failed to create new UC2 Instances.");
+        } else {
+            res.status(201).json(doc.ops[0]);
+        }
+    });
     
-  
+  //insertMany
     // if (!req.body.name) {
     //   handleError(res, "Invalid user input", "Must provide a name.", 400);
     // } else {
