@@ -19,7 +19,7 @@ export class LoginService {
     const params = new HttpParams()
       .set('user', userId)
       .set('pwd', password);
-    return this.http.get<string>(`${environment.apiEndPoint}/login`, { params})
+    return this.http.get<string>(`${environment.apiEndPoint}/login/${userId}/${password}`)
         .pipe(
           map( (response: string) => {
             console.log('response', response);
