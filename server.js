@@ -79,11 +79,11 @@ function handleError(res, reason, message, code) {
         });
   });
 
-  app.get("/api/login", function(req, res) {
+  app.get("/api/login/:user", function(req, res) {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
     //var query = [{ userId: req.params.user }, { password: req.params.pwd }];
-    //var query = { userId: req.params.user };
-    db.collection("users").find({}).toArray(function(err, docs) {
+    var query = { userId: req.params.user };
+    db.collection("users").find(query).toArray(function(err, docs) {
       if (err) {
         handleError(res, err.message, "Failed to get user.");
       } else {
