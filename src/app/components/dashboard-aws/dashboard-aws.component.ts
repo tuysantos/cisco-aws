@@ -25,6 +25,7 @@ export class DashboardAwsComponent implements OnInit {
     this.totalStop = 0;
     this.totalRunning = 0;
     this.uc2Instances = [];
+    this.uc2ActiveList = [];
     this.activityService.getActiveInstances()
         .pipe(take(1))
         .subscribe( (res: IUC2Instance[]) => {

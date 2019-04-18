@@ -55,12 +55,24 @@ function handleError(res, reason, message, code) {
 
   app.get("/api/login", function(req, res) {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
-    db.collection(INSTANCES_COLLECTION).find({}).toArray(function(err, docs) {
+    var query = [{ userId: req.param.user }, { password: req.param.pwd }];
+    db.collection("users").find(query).toArray(function(err, docs) {
       if (err) {
-        handleError(res, err.message, "Failed to get UC2 Instances.");
+        handleError(res, err.message, "Failed to get user.");
       } else {
-        res.status(200).json(docs);
+        res.status(200).json(doc.ops[0].token);
       }
+    });
+  });
+
+  app.post("/api/login", function(req, res) {
+    var users = {userId:'admin', password:'supersecret', token: 'YWRtaW46c3VwZXJzZWNyZXQ='}
+    db.collection("users").insertOne(users, function(err, doc) {
+        if (err) {
+            handleError(res, err.message, "Failed to create new user.");
+        } else {
+            res.status(201).json(doc.ops[0]);
+        }
     });
   });
   

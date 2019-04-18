@@ -32,10 +32,9 @@ export class DashboardComponent implements OnInit {
     this.activityService.getActiveInstances()
         .pipe(take(1))
         .subscribe( (res: IUC2Instance[]) => {
-          console.log('res', res);
-          //this.uc2Instances = this.originalList = res;
-          //this.getSummary();
-          //this.buildActiveList(0);
+          this.uc2Instances = this.originalList = res;
+          this.getSummary();
+          this.buildActiveList(0);
         });
   }
 
