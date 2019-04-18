@@ -75,7 +75,7 @@ function getTotal() {
             if (err) {
               handleError(res, err.message, "Failed to get UC2 Instances.");
             } else {
-            let result = {total: getTotal(), instances: docs}
+            let result = {total: 23, instances: docs}
               res.status(200).json(result);
             }
           });
