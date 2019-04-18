@@ -88,18 +88,18 @@ function handleError(res, reason, message, code) {
     
   });
 
-  app.get("/api/login/:user/:pwd", function(req, res) {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
-    //var query = [{ userId: req.params.user }, { password: req.params.pwd }];
-    var query = { userId: req.params.user };
-    db.collection("users").find(query).toArray(function(err, docs) {
-      if (err) {
-        handleError(res, err.message, "Failed to get user.");
-      } else {
-        res.status(200).json(doc.ops.token);
-      }
-    });
-  });
+//   app.get("/api/login/:user/:pwd", function(req, res) {
+//     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
+//     //var query = [{ userId: req.params.user }, { password: req.params.pwd }];
+//     var query = { userId: req.params.user };
+//     db.collection("users").find(query).toArray(function(err, docs) {
+//       if (err) {
+//         handleError(res, err.message, "Failed to get user.");
+//       } else {
+//         res.status(200).json(doc.ops.token);
+//       }
+//     });
+//   });
 
   app.post("/api/login", function(req, res) {
     var users = {userId:'admin', password:'supersecret', token: 'YWRtaW46c3VwZXJzZWNyZXQ='}
