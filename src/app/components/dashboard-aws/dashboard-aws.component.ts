@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivityService } from 'src/app/services/activity.service';
 import { SorterService } from 'src/app/services/sorter.service';
-import { IUC2Instance } from 'src/app/core/models/uc2Instance';
+import { IUC2Instance, IPagedItem } from 'src/app/core/models/uc2Instance';
 import { take } from 'rxjs/operators';
+import { ISearchType } from 'src/app/core/models/searchType';
 
 @Component({
   selector: 'app-dashboard-aws',
@@ -16,20 +17,29 @@ export class DashboardAwsComponent implements OnInit {
 
   totalRunning: number = 0;
   totalStop: number = 0;
+  originalList: IUC2Instance[];
   uc2Instances: IUC2Instance[];
   uc2ActiveList: IUC2Instance[];
   totalRecords: number = 0;
   pageSize: number = 10;
+  availableType: string[] = ['name','id','type','az','publicIP','privateIP','state'];
 
   ngOnInit() {
     this.totalStop = 0;
     this.totalRunning = 0;
     this.uc2Instances = [];
     this.uc2ActiveList = [];
-    this.activityService.getActiveInstances()
+    this.getInstances(0, this.pageSize);
+  }
+
+  getInstances(skip: number, top: number): void {
+    this.uc2Instances = [];
+    this.uc2ActiveList = [];
+    this.activityService.getActiveInstancesPage(skip, top)
         .pipe(take(1))
-        .subscribe( (res: IUC2Instance[]) => {
-          this.uc2Instances = res;
+        .subscribe( (res: IPagedItem) => {
+          this.uc2Instances = this.originalList = res.instances;
+          this.totalRecords = res.total;
           this.getSummary();
           this.buildActiveList(0);
         });
@@ -38,7 +48,7 @@ export class DashboardAwsComponent implements OnInit {
   getSummary(): void {
     this.totalRunning = 0;
     this.totalStop = 0;
-    this.totalRecords = 0;
+    //this.totalRecords = 0;
     for(var i=0; i< this.uc2Instances.length; i++) {
       if(this.uc2Instances[i].state === 'running') {
         this.totalRunning++;
@@ -47,7 +57,7 @@ export class DashboardAwsComponent implements OnInit {
         this.totalStop++;
       }
     }
-    this.totalRecords = this.totalRunning + this.totalStop;
+    //this.totalRecords = this.totalRunning + this.totalStop;
   }
 
   buildActiveList(start: number) {
@@ -73,11 +83,39 @@ export class DashboardAwsComponent implements OnInit {
 
   nextPreviousPage(id: number) {
     let page = (id - 1) * this.pageSize;
-    this.buildActiveList(page);
+    this.getInstances(page, this.pageSize);
   }
 
   pageChanged(page: number) {
     this.nextPreviousPage(page);
+  }
+
+
+  searchItem(item: ISearchType): void {
+    this.uc2Instances = [];
+
+    if(item.searchText === ''){
+      this.reset();
+      return;
+    }
+
+    for(var i=0; i < this.originalList.length; i++) {
+      for(var record in this.originalList[i]){
+        if((record === item.type) && (this.originalList[i][record] === item.searchText)){
+          this.uc2Instances[this.uc2Instances.length] = this.originalList[i];
+        }
+      }
+    }
+    this.getSummary();
+    this.buildActiveList(0);
+    this.totalRecords = this.totalRunning + this.totalStop;
+  }
+
+  reset(): void {
+    this.getInstances(0, this.pageSize);
+    // this.uc2Instances = this.originalList;
+    // this.getSummary();
+    // this.buildActiveList(0);
   }
 
 }

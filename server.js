@@ -97,9 +97,10 @@ function handleError(res, reason, message, code) {
         });
   });
 
-  app.get("/api/login/:token", function(req, res) {
+  app.get("/api/login/:user", function(req, res) {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
-    var query = {token: req.params.token}
+    //var query = {token: req.params.token}
+    var query = {userId: req.params.user}
     db.collection("users").find(query).toArray(function(err, docs) {
       if (err) {
         res.status(200).json({isvalid: false});

@@ -30,9 +30,11 @@ export class LoginComponent implements OnInit {
     this.errorMessage = '';
     this.loginService.login(this.loginUser.username, this.loginUser.password)
       .pipe(take(1))
-      .subscribe((data: string) => {
+      .subscribe((data: any) => {
         this.loading = false;
-        if(data != '') {
+        console.log('data', data)
+        if(data.isvalid === true) {
+          console.log('data should load', data)
           this.router.navigate(['/dashboard']);
         }
         else {

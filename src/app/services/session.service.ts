@@ -13,9 +13,17 @@ export class SessionService {
   constructor() {
     this.hasClientStorage = window.localStorage !== undefined;
    }
-
+  
   addUser(token: string){
     sessionStorage.setItem('currentUser', token);
+  }
+
+  addToken(token: string){
+    sessionStorage.setItem('token', token);
+  }
+
+  getToken(): string{
+    return sessionStorage.getItem('token');
   }
 
   removeUser(){

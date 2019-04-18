@@ -1,8 +1,8 @@
 <div class="container dashboard-container">
     <div class="row">
       <div class="col-sm-12">
-        <span class="title">Dashboard AWS - Active Instances
-            <a class="btn btn-default" [routerLink]="['/dashboard']"> click here for Mock version</a>
+        <span class="title">Dashboard - Server-side Pagination
+            <a class="btn btn-default" [routerLink]="['/dashboard']"> click here for client-side pagination</a>
         </span>
       </div>
     </div>
@@ -11,6 +11,14 @@
         <app-summary-activity 
           [totalRunning]="totalRunning"
           [totalStop]="totalStop"></app-summary-activity>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <app-search 
+          [availableType]="availableType" 
+          [selectedSearchType]="'name'" 
+          (searchEvent)="searchItem($event)"></app-search>
       </div>
     </div>
     <div class="row">

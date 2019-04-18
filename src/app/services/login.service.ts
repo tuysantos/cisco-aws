@@ -16,17 +16,18 @@ export class LoginService {
   constructor(private http: HttpClient, private sessionService: SessionService) { }
 
   public login(userId: string, password: string): Observable<string> {
-    const params = new HttpParams()
-      .set('user', userId)
-      .set('pwd', password);
-    return this.http.get<string>(`${environment.apiEndPoint}/login/${userId}/${password}`)
+    let token = btoa(this.sessionService.getUserName() + ':' + this.sessionService.getUserPassword())
+    return this.http.get<string>(`${environment.apiEndPoint}/login/${token}`)
         .pipe(
-          map( (response: string) => {
+          map( (response: any) => {
             console.log('response', response);
-            this.sessionService.addUser(response);
-            this.sessionService.setUserName(userId);
-            this.sessionService.setUserPassword(password);
-            this.sessionService.setHeader();
+            if(response.isvalid){
+              this.sessionService.addToken(token);
+            }
+            
+            //this.sessionService.setUserName(userId);
+            //this.sessionService.setUserPassword(password);
+            //this.sessionService.setHeader();
             return response;
           }),
           catchError(this.handleError)
