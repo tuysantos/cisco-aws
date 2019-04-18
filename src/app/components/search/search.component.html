@@ -1,0 +1,18 @@
+<div class="row search-container">
+  <div class="col-sm-12">
+    <span class="obj-align spacer">Search:</span>
+    <input type="text" id="searchCriteria" class="obj-align spacer margin-15" name="searchCriteria" [(ngModel)]="searchText" />
+    <span class="obj-align spacer">Type:</span>
+    <select id="select-type-basic" [(ngModel)]="selectedSearchType" class="margin-15">
+        <option *ngFor="let item of availableType">
+        {{item}}
+        </option>
+    </select>
+    <button type="button" id="btnSearch" class="obj-align spacer btn btn-primary margin-15" (click)="searchCondition()">
+        <span class="glyphicon glyphicon-search">&nbsp;Search</span>
+    </button>
+    <button *ngIf="searchText.length != ''" type="button" id="btnReset" class="obj-align spacer btn btn-secondary" (click)="resetList()">
+        <span class="glyphicon glyphicon-remove">&nbsp;Reset</span>
+    </button>
+  </div>
+</div>
