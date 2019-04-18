@@ -43,7 +43,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ## Before running or deploying the application
 1. Run `npm install` at the project root to install the app dependencies
 
-### Deploying the application at Heroku
+### Deploying the application to Heroku
 
 1. git add .
 1. git commit -m 'test API endpoints'
