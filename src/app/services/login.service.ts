@@ -16,18 +16,15 @@ export class LoginService {
   constructor(private http: HttpClient, private sessionService: SessionService) { }
 
   public login(userId: string, password: string): Observable<string> {
-    let token = btoa(this.sessionService.getUserName() + ':' + this.sessionService.getUserPassword())
+    let token = btoa(userId + ':' + password);
     return this.http.get<string>(`${environment.apiEndPoint}/login/${token}`)
         .pipe(
           map( (response: any) => {
-            console.log('response', response);
             if(response.isvalid){
               this.sessionService.addToken(token);
+              this.sessionService.setUserName(userId);
+              this.sessionService.setUserPassword(password);
             }
-            
-            //this.sessionService.setUserName(userId);
-            //this.sessionService.setUserPassword(password);
-            //this.sessionService.setHeader();
             return response;
           }),
           catchError(this.handleError)
@@ -43,29 +40,11 @@ export class LoginService {
     return Observable.throw(error);
   }
 
-    // return ObservableOf(this.isValidUser(user, password)).pipe(
-    //   map((response) => {
-    //     this.sessionService.addUser(response);
-    //     this.sessionService.setUserName(user);
-    //     this.sessionService.setUserPassword(password);
-    //     this.sessionService.setHeader();
-    //     return response;
-    //   })
-    // );
-
-
-  
-
-  // private isValidUser(user: string, pwd: string): string {
-  //   return ((user === 'admin') && (pwd === 'supersecret')) ? '1111111111111' : '';
-  // }
-
   logout() {
-    // remove user from local storage to log user out
-    sessionStorage.removeItem('currentUser');
+    // remove user from local session to log user out
+    this.sessionService.removeUser();
     this.sessionService.resetHeader();
     this.sessionService.setIsLogged('false');
     this.sessionService.resetUserCredentials();
-    //this.sessionService.resetData();
   }
 }

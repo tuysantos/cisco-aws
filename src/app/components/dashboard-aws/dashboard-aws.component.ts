@@ -48,7 +48,6 @@ export class DashboardAwsComponent implements OnInit {
   getSummary(): void {
     this.totalRunning = 0;
     this.totalStop = 0;
-    //this.totalRecords = 0;
     for(var i=0; i< this.uc2Instances.length; i++) {
       if(this.uc2Instances[i].state === 'running') {
         this.totalRunning++;
@@ -57,7 +56,6 @@ export class DashboardAwsComponent implements OnInit {
         this.totalStop++;
       }
     }
-    //this.totalRecords = this.totalRunning + this.totalStop;
   }
 
   buildActiveList(start: number) {
@@ -113,9 +111,6 @@ export class DashboardAwsComponent implements OnInit {
 
   reset(): void {
     this.getInstances(0, this.pageSize);
-    // this.uc2Instances = this.originalList;
-    // this.getSummary();
-    // this.buildActiveList(0);
   }
 
 }

@@ -32,8 +32,7 @@ export class LoginComponent implements OnInit {
       .pipe(take(1))
       .subscribe((data: any) => {
         this.loading = false;
-        console.log('data', data)
-        if(data.isvalid === true) {
+        if(data.isvalid) {
           console.log('data should load', data)
           this.router.navigate(['/dashboard']);
         }

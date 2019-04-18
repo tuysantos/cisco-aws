@@ -20,8 +20,8 @@ describe('LoginComponent', () => {
   let passwordEl: DebugElement;
 
   class LoginServiceMock {
-    login (user: string, pwd: string): Observable<string> {
-      return ObservableOf((user === 'admin' && pwd ==='supersecret') ? '1111111111111' : '');
+    login (user: string, pwd: string): Observable<any> {
+      return ObservableOf((user === 'admin' && pwd ==='supersecret') ? {isvalid: true} : {isvalid: false});
     }
 
     logout() {

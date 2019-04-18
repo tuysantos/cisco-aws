@@ -43,9 +43,6 @@ export class PaginationComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    console.log('this.pageSize', this.pageSize)
-    console.log('this.totalItems', this.totalItems)
-    //this.pagerPageSize = this.pageSize;
     this.pages = [];
     this.pagerTotalItems = this.totalItems;
     this.update();

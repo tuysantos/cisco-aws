@@ -27,7 +27,7 @@ export class SessionService {
   }
 
   removeUser(){
-    sessionStorage.removeItem('currentUser');
+    sessionStorage.removeItem('token');
   }
 
   getUser(): string{

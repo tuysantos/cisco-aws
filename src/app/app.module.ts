@@ -12,7 +12,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { PaginationComponent } from './components/pagination/pagination.component';
 import { DashboardAwsComponent } from './components/dashboard-aws/dashboard-aws.component';
 import { SearchComponent } from './components/search/search.component';
-import { ActivityInterceptor } from './services/activityInterceptor';
 
 @NgModule({
   declarations: [
@@ -32,7 +31,6 @@ import { ActivityInterceptor } from './services/activityInterceptor';
     HttpClientModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: ActivityInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]
 })

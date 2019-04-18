@@ -19,7 +19,7 @@ describe('DashboardAwsComponent', () => {
   const activatedRouter = jasmine.createSpyObj('ActivatedRoute', ['navigate']);
 
   class ActivityServiceMock {
-    getActiveInstances(): Observable<IUC2Instance[]> {
+    getActiveInstancesPage(): Observable<IUC2Instance[]> {
       return ObservableOf(this.getMockData());
     }
 
