@@ -103,7 +103,7 @@ function handleError(res, reason, message, code) {
     var query = {userId: req.params.user}
     db.collection("users").find(query).toArray(function(err, docs) {
       if (err) {
-        res.status(200).json({isvalid: false});
+        handleError(res, err.message, "Failed to create new user.");
       } else {
         res.status(200).json({isvalid: true});
       }
