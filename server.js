@@ -48,6 +48,20 @@ function getTotal() {
       });
 }
 
+function getInstancesByPage(skip, top) {
+
+    db.collection(INSTANCES_COLLECTION).find({}).skip(skip).limit(top).toArray(function(err, docs) {
+        if (err) {
+          //handleError(res, err.message, "Failed to get UC2 Instances.");
+          return {};
+        } else {
+            return docs;
+        //let result = {total: 23, instances: docs}
+          //res.status(200).json(result);
+        }
+      });
+}
+
   /*  "/api/uc2instances"
    *    GET: finds all uc2 instances
    */
@@ -70,15 +84,18 @@ function getTotal() {
         top = (isNaN(topVal)) ? 10 : +topVal,
         skip = (isNaN(skipVal)) ? 0 : +skipVal;
 
-
-        db.collection(INSTANCES_COLLECTION).find({}).skip(skip).limit(top).toArray(function(err, docs) {
-            if (err) {
-              handleError(res, err.message, "Failed to get UC2 Instances.");
-            } else {
-            let result = {total: 23, instances: docs}
-              res.status(200).json(result);
-            }
-          });
+        let count = getTotal();
+        let docs = getInstancesByPage(skip, top);
+        let result = {total: count, instances: docs}
+        res.status(200).json(result);
+        // db.collection(INSTANCES_COLLECTION).find({}).skip(skip).limit(top).toArray(function(err, docs) {
+        //     if (err) {
+        //       handleError(res, err.message, "Failed to get UC2 Instances.");
+        //     } else {
+        //     let result = {total: 23, instances: docs}
+        //       res.status(200).json(result);
+        //     }
+        //   });
     
     // db.collection(INSTANCES_COLLECTION).count((err, instCount) => {
     //     let count = instCount;
