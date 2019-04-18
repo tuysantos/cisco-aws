@@ -55,7 +55,8 @@ function handleError(res, reason, message, code) {
 
   app.get("/api/login/:user/:pwd", function(req, res) {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
-    var query = [{ userId: req.params.user }, { password: req.params.pwd }];
+    //var query = [{ userId: req.params.user }, { password: req.params.pwd }];
+    var query = { userId: req.params.user };
     db.collection("users").find(query).toArray(function(err, docs) {
       if (err) {
         handleError(res, err.message, "Failed to get user.");
