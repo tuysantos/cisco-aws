@@ -43,6 +43,7 @@ function handleError(res, reason, message, code) {
    */
 
   app.get("/api/uc2instances", function(req, res) {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
     db.collection(INSTANCES_COLLECTION).find({}).toArray(function(err, docs) {
       if (err) {
         handleError(res, err.message, "Failed to get UC2 Instances.");
@@ -53,6 +54,7 @@ function handleError(res, reason, message, code) {
   });
 
   app.get("/api/login", function(req, res) {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
     db.collection(INSTANCES_COLLECTION).find({}).toArray(function(err, docs) {
       if (err) {
         handleError(res, err.message, "Failed to get UC2 Instances.");

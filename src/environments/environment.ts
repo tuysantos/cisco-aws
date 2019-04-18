@@ -4,7 +4,9 @@
 
 export const environment = {
   production: false,
-  apiEndPoint: 'https://itg-prd-recruit.appspot.com/api'
+  apiEndPoint: 'http://stormy-journey-87569.herokuapp.com/api',
+  headerValue: 'UIYQWENKASDPOIU&(/!BKJADSA%&/(ASDA',
+  header: 'headerKey'
 };
 
 /*

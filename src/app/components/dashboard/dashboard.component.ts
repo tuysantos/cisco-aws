@@ -28,12 +28,14 @@ export class DashboardComponent implements OnInit {
     this.totalStop = 0;
     this.totalRunning = 0;
     this.uc2Instances = [];
+    this.uc2ActiveList = [];
     this.activityService.getActiveInstances()
         .pipe(take(1))
         .subscribe( (res: IUC2Instance[]) => {
-          this.uc2Instances = this.originalList = res;
-          this.getSummary();
-          this.buildActiveList(0);
+          console.log('res', res);
+          //this.uc2Instances = this.originalList = res;
+          //this.getSummary();
+          //this.buildActiveList(0);
         });
   }
 
@@ -89,7 +91,7 @@ export class DashboardComponent implements OnInit {
       this.reset();
       return;
     }
-    
+
     for(var i=0; i < this.originalList.length; i++) {
       for(var record in this.originalList[i]){
         if((record === item.type) && (this.originalList[i][record] === item.searchText)){

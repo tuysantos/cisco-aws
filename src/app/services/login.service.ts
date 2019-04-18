@@ -18,6 +18,9 @@ export class LoginService {
     return ObservableOf(this.isValidUser(user, password)).pipe(
       map((response) => {
         this.sessionService.addUser(response);
+        this.sessionService.setUserName(user);
+        this.sessionService.setUserPassword(password);
+        this.sessionService.setHeader();
         return response;
       })
     );
@@ -30,5 +33,9 @@ export class LoginService {
   logout() {
     // remove user from local storage to log user out
     sessionStorage.removeItem('currentUser');
+    this.sessionService.resetHeader();
+    this.sessionService.setIsLogged('false');
+    this.sessionService.resetUserCredentials();
+    //this.sessionService.resetData();
   }
 }

@@ -13,14 +13,16 @@ export class ActivityService {
   constructor(private http: HttpClient) { }
   
   getActiveInstances(): Observable<IUC2Instance[]> {
-    return ObservableOf(this.getMockData());
-    /*return this.http.get<UC2Instance[]>(`${environment.apiEndPoint}/vehicles/`)
+    //return ObservableOf(this.getMockData());
+
+    return this.http.get<IUC2Instance[]>(`${environment.apiEndPoint}/uc2instances`)
         .pipe(
           map( (items: IUC2Instance[]) => {
+            console.log('items', items);
             return items;
           }),
           catchError(this.handleError)
-        );*/
+        );
   }
 
   private handleError(error: HttpErrorResponse) {
@@ -32,7 +34,7 @@ export class ActivityService {
     return Observable.throw(error);
   }
 
-  private getMockData(): IUC2Instance[]{
+  /*private getMockData(): IUC2Instance[]{
     let data: IUC2Instance[];
     data = [];
 
@@ -59,6 +61,6 @@ export class ActivityService {
     data[data.length] = { name: 'name 21', id: 'y-251252dkfg', type: 't1.medium', az: 'us-east-1b', publicIP: '54.210.168.140', privateIP: '10.21.30.40', state: 'running'};
     data[data.length] = { name: 'name 22', id: 'i-162542djgg', type: 't2.medium', az: 'us-east-1b', publicIP: '54.210.168.141', privateIP: '10.21.30.40', state: 'running'};
     return data;
-  }
+  }*/
 }
  

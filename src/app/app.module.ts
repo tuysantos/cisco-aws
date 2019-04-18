@@ -8,10 +8,11 @@ import { LoginComponent } from './components/login/login.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { SummaryActivityComponent } from './components/summary-activity/summary-activity.component';
 import { ActivityListComponent } from './components/activity-list/activity-list.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { PaginationComponent } from './components/pagination/pagination.component';
 import { DashboardAwsComponent } from './components/dashboard-aws/dashboard-aws.component';
 import { SearchComponent } from './components/search/search.component';
+import { ActivityInterceptor } from './services/activityInterceptor';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,9 @@ import { SearchComponent } from './components/search/search.component';
     FormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: ActivityInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
