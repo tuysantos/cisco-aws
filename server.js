@@ -59,29 +59,31 @@ function handleError(res, reason, message, code) {
         skipVal = req.params.skip,
         top = (isNaN(topVal)) ? 10 : +topVal,
         skip = (isNaN(skipVal)) ? 0 : +skipVal;
+
+        db.collection(INSTANCES_COLLECTION).find({}).skip(skip).limit(top).toArray(function(err, docs) {
+            if (err) {
+              handleError(res, err.message, "Failed to get UC2 Instances.");
+            } else {
+                
+              res.status(200).json(docs);
+            }
+          });
     
-    db.collection(INSTANCES_COLLECTION).count((err, instCount) => {
-        let count = instCount;
-        db.collection(INSTANCES_COLLECTION).find({})
-            .skip(skipVal)
-            .limit(topVal)
-            .exec((err, instances) => {
-                if(err) {
-                    return callback(err);
-                }
-                callback(null, {
-                    count: count,
-                    instances: instances
-                });
-            })
-        //     .toArray(function(err, docs) {
-        //     if (err) {
-        //       handleError(res, err.message, "Failed to get UC2 Instances.");
-        //     } else {
-        //       res.status(200).json(docs);
-        //     }
-        //   });
-    });
+    // db.collection(INSTANCES_COLLECTION).count((err, instCount) => {
+    //     let count = instCount;
+    //     db.collection(INSTANCES_COLLECTION).find({})
+    //         .skip(skipVal)
+    //         .limit(topVal)
+    //         .exec((err, instances) => {
+    //             if(err) {
+    //                 return callback(err);
+    //             }
+    //             callback(null, {
+    //                 count: count,
+    //                 instances: instances
+    //             });
+    //         })
+    // });
 
     
 
