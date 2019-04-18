@@ -53,6 +53,41 @@ function handleError(res, reason, message, code) {
     });
   });
 
+  app.get("/api/uc2instances/page/:skip/:top", function(req, res) {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
+    const topVal = req.params.top,
+        skipVal = req.params.skip,
+        top = (isNaN(topVal)) ? 10 : +topVal,
+        skip = (isNaN(skipVal)) ? 0 : +skipVal;
+    
+    db.collection(INSTANCES_COLLECTION).count((err, instCount) => {
+        let count = instCount;
+        db.collection(INSTANCES_COLLECTION).find({})
+            .skip(skipVal)
+            .limit(topVal)
+            .exec((err, instances) => {
+                if(err) {
+                    return callback(err);
+                }
+                callback(null, {
+                    count: count,
+                    instances: instances
+                });
+            })
+        //     .toArray(function(err, docs) {
+        //     if (err) {
+        //       handleError(res, err.message, "Failed to get UC2 Instances.");
+        //     } else {
+        //       res.status(200).json(docs);
+        //     }
+        //   });
+    });
+
+    
+
+    
+  });
+
   app.get("/api/login/:user/:pwd", function(req, res) {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
     //var query = [{ userId: req.params.user }, { password: req.params.pwd }];
